@@ -70,7 +70,9 @@ def run_front(path: Path, command: str, args: Sequence[str]) -> None:
 
     printer = Printer.instance()
 
-    printer.env_patch["PATH"] = project_path([f"{path.resolve() / 'node_modules' / '.bin'}"])
+    printer.env_patch["PATH"] = project_path(
+        [f"{path.resolve() / 'node_modules' / '.bin'}"]
+    )
     printer.handover("Running command", path, [command, *args])
 
 

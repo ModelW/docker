@@ -1,0 +1,15 @@
+name: Build on schedule
+
+on:
+    schedule:
+        - cron: "42 * * * *"
+
+jobs:
+    call-build-image:
+        uses: ./.github/workflows/build-image.yml
+        strategy:
+            matrix:
+                ref: [ develop ]
+        with:
+            ref: ${{ matrix.ref }}
+        secrets: inherit

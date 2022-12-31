@@ -98,7 +98,7 @@ ARG MODEL_W_PIP_EXTRA=""
 
 
 RUN python -m venv /opt/model-w \
-    && /opt/model-w/bin/python -m pip install $MODEL_W_PIP_EXTRA 'modelw-docker' \
+    && /opt/model-w/bin/python -m pip install $MODEL_W_PIP_EXTRA 'modelw-docker>=2022.10.0a2,<2023.0.0' \
     && ln -s /opt/model-w/bin/modelw-docker /usr/local/bin/modelw-docker
 
 RUN mkdir /code \
