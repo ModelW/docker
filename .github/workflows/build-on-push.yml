@@ -11,6 +11,8 @@ jobs:
     call-build-image:
         runs-on: ubuntu-latest
         steps:
+            - name: Checkout
+              uses: actions/checkout@v3
             - name: Call build-image
               uses: ./.github/actions/build-image
               with:
