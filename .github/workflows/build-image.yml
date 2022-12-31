@@ -8,10 +8,14 @@ on:
 jobs:
     docker:
         runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: image
         steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Extract branch name
+              shell: bash
+              run: |
+                  echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | sed -E 's/^support\///')"
+              id: extract_branch
             - name: Print Docker username
               env:
                   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -27,5 +31,7 @@ jobs:
             - name: Build and push
               uses: docker/build-push-action@v3
               with:
+                  context: ./image
                   push: true
-                  tags: ${{ secrets.DOCKER_USERNAME }}/base:${{ github.branch }}
+                  tags: |-
+                      ${{ secrets.DOCKER_USERNAME }}/base:${{ steps.extract_branch.outputs.branch }}
