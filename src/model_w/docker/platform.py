@@ -8,14 +8,17 @@ def in_docker():
 
     Notes
     -----
-    We assume here that if the root partition is an overlay filesystem, we are
-    running in a Docker container. This seems reasonable as few people would
-    run their desktop on an overlay filesystem while this is the base of
-    Docker.
+    There is no official way to check if we are running in a Docker container.
+    What makes the most sense that I've found is that Docker will mount the
+    DNS-related files from the host into the container. So we check if those
+    files are mounted (no native system should have those mounted).
+
+    Previously we checked if the root is an overlayfs, but that's not a good
+    enough check because it's possible to run Docker with other backends
+    like ZFS.
     """
 
-    for partition in disk_partitions(all=True):
-        if partition.mountpoint == "/":
-            return partition.fstype == "overlay"
+    expected_mount_points = {"/etc/resolve.conf", "/etc/hosts", "/etc/hostname"}
+    found_mount_points = set(x.mountpoint for x in disk_partitions(all=True))
 
-    return False
+    return expected_mount_points.issubset(found_mount_points)
