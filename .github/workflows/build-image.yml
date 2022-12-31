@@ -12,6 +12,8 @@ jobs:
             run:
                 working-directory: ./image
         steps:
+            - name: Print Docker username
+              run: echo ${{ secrets.DOCKER_USERNAME }}
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v2
             - name: Login to Docker Hub
