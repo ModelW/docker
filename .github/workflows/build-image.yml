@@ -10,10 +10,13 @@ jobs:
         runs-on: ubuntu-latest
         defaults:
             run:
-                working-directory: ./image
+                working-directory: image
         steps:
             - name: Print Docker username
-              run: echo ${{ secrets.DOCKER_USERNAME }}
+              env:
+                  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+              run: |
+                  echo DOCKER_USERNAME=$DOCKER_USERNAME
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v2
             - name: Login to Docker Hub
