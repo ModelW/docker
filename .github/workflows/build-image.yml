@@ -23,5 +23,4 @@ jobs:
               uses: docker/build-push-action@v3
               with:
                   push: true
-                  tags:
-                      - ${{ secrets.DOCKER_USERNAME }}/base:${{ github.branch }}
+                  tags: ${{ secrets.DOCKER_USERNAME }}/base:${{ github.branch }}
