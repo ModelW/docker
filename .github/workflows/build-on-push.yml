@@ -14,6 +14,6 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
             - name: Call build-image
-              uses: ./.github/actions/build-image
+              uses: ./.github/actions/build-image.yml
               with:
                   ref: ${{ github.ref }}
