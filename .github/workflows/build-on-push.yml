@@ -9,6 +9,6 @@ on:
 
 jobs:
     call-build-image:
-        uses: ./.github/actions/build-image.yml
+        uses: ./.github/workflows/build-image.yml
         with:
             ref: ${{ github.ref }}
