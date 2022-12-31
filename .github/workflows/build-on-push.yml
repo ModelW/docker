@@ -12,3 +12,4 @@ jobs:
         uses: ./.github/workflows/build-image.yml
         with:
             ref: ${{ github.ref }}
+        secrets: inherit
