@@ -1,11 +1,11 @@
 name: Build Docker Image
 
 on:
-    push:
-        branches:
-            - develop
-            - master
-            - support/*
+    workflow_call:
+        inputs:
+            ref:
+                required: true
+                type: string
 
 jobs:
     docker:
@@ -13,6 +13,8 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v3
+              with:
+                  ref: ${{ inputs.ref }}
             - name: Extract branch name
               shell: bash
               run: |

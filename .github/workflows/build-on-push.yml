@@ -1,0 +1,17 @@
+name: Build on push
+
+on:
+    push:
+        branches:
+            - "develop"
+            - "master"
+            - "support/**"
+
+jobs:
+    call-build-image:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Call build-image
+              uses: ./.github/actions/build-image
+              with:
+                  ref: ${{ github.ref }}
