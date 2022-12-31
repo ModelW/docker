@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "modelw-docker"
+version = "2022.10.0a1"
+description = "Utility to simplify Dockerfiles"
+authors = ["Rémy Sanchez <remy.sanchez@hyperthese.net>"]
+license = "WTFPL"
+readme = "README.md"
+packages = [{include = "model_w/docker", from = "src"}]
+
+[tool.poetry.scripts]
+modelw-docker = "model_w.docker.__main__:__main__"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+psutil = "^5.9.4"
+colorama = "^0.4.6"
+tomli = { version = "^2.0.1", python = "<3.11" }
+typefit = "^0.4.2"
+
+
+[tool.poetry.group.dev.dependencies]
+monoformat = "^0.1.0b3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
