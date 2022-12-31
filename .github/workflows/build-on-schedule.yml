@@ -9,7 +9,7 @@ jobs:
         uses: ./.github/workflows/build-image.yml
         strategy:
             matrix:
-                ref: [ develop ]
+                ref: [ develop, master ]
         with:
             ref: ${{ matrix.ref }}
         secrets: inherit
