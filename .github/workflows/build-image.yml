@@ -4,6 +4,8 @@ on:
     push:
         branches:
             - develop
+            - master
+            - support/*
 
 jobs:
     docker:
@@ -16,7 +18,7 @@ jobs:
               run: |
                   echo GITHUB_ENV="$GITHUB_ENV"
                   echo GITHUB_OUTPUT="$GITHUB_OUTPUT"
-                  echo "DOCKER_TAG=$(echo ${GITHUB_REF#refs/heads/} | sed -E 's/^support\///')" >> $GITHUB_ENV
+                  echo "DOCKER_TAG=$(echo ${GITHUB_REF#refs/heads/} | sed -E 's/^support\///' | sed 's/^master$/latest/')" >> $GITHUB_ENV
                   cat $GITHUB_ENV
               id: extract_branch
             - name: Print Docker username
