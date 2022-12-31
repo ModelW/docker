@@ -42,3 +42,5 @@ jobs:
                   push: true
                   tags: |-
                       ${{ secrets.DOCKER_USERNAME }}/base:${{ env.DOCKER_TAG }}
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
