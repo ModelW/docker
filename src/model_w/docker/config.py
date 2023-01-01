@@ -155,7 +155,13 @@ def guess_api_config(path: Path) -> Dict:
         elif isinstance(package, dict):
             if package_root is None:
                 package_root = package["include"]
-            required_files[f'{package["from"]}/{package["include"]}/__init__.py'] = ""
+
+            if src_from := package.get("from"):
+                prefix = f'{src_from.rstrip("/")}/'
+            else:
+                prefix = ""
+
+            required_files[f'{prefix}{package["include"]}/__init__.py'] = ""
 
     asgi = wsgi = celery = ""
 
