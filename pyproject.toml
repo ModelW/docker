@@ -6,6 +6,22 @@ authors = ["Rémy Sanchez <remy.sanchez@hyperthese.net>"]
 license = "WTFPL"
 readme = "README.md"
 packages = [{include = "model_w/docker", from = "src"}]
+repository = "https://github.com/ModelW/docker/"
+documentation = "https://github.com/ModelW/docker/"
+homepage = "https://github.com/ModelW/docker/"
+keywords = ["docker", "django", "nuxt", "dockerfile"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Utilities",
+    "Framework :: Django",
+    "Framework :: Wagtail",
+]
 
 [tool.poetry.scripts]
 modelw-docker = "model_w.docker.__main__:__main__"
