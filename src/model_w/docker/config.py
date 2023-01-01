@@ -167,7 +167,7 @@ def guess_api_config(path: Path) -> Dict:
 
     if package_root is not None:
         asgi = f"{package_root.replace('/', '.')}.django.asgi:application"
-        wsgi = f"{package_root.replace('/', '/')}.django.wsgi:application"
+        wsgi = f"{package_root.replace('/', '.')}.django.wsgi:application"
         celery = f"{package_root.replace('/', '.')}.django.celery:app"
 
     return {
