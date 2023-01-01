@@ -104,3 +104,30 @@ server = "daphne"
 wsgi = "demo_project.django.wsgi:application"
 asgi = "demo_project.django.asgi:application"
 ```
+
+## Contribution
+
+The Docker image and the package are auto-built and published on Docker Hub and
+Pypi respectively. The build is triggered by pushing a tag to the repository
+(for the Python package) and for each branch's head (for the Docker image).
+
+If you want to make a release, the Makefile will help you:
+
+```bash
+make release VERSION=2022.10.0
+```
+
+This will use Git Flow to make the release, and then also make sure to update
+the version in the Dockerfile and the `modelw-docker` package.
+
+Once this is done, you have to:
+
+-   Push the tag to the repository
+-   Push develop and master
+-   Make sure you update support branches accordingly (this cannot be automated
+    it's a human decision)
+
+> **Note** &mdash; If you're releasing a new major version of Model&nbsp;W, you
+> need to update the `image/Dockerfile` to match the new "upper" version limit.
+> This script will only update the "lower" version limit, to make sure the image
+> is built with the package you just released.
