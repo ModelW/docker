@@ -17,10 +17,12 @@ jobs:
                   ref: ${{ inputs.ref }}
             - name: Extract branch name
               shell: bash
+              env:
+                  MODELW_REF: ${{ inputs.ref }}
               run: |
                   echo GITHUB_ENV="$GITHUB_ENV"
                   echo GITHUB_OUTPUT="$GITHUB_OUTPUT"
-                  echo "DOCKER_TAG=$(echo ${GITHUB_REF#refs/heads/} | sed -E 's/^support\///' | sed 's/^master$/latest/')" >> $GITHUB_ENV
+                  echo "DOCKER_TAG=$(echo ${MODELW_REF#refs/heads/} | sed -E 's/^support\///' | sed 's/^master$/latest/')" >> $GITHUB_ENV
                   cat $GITHUB_ENV
               id: extract_branch
             - name: Print debug info

@@ -18,7 +18,7 @@ def in_docker():
     like ZFS.
     """
 
-    expected_mount_points = {"/etc/resolve.conf", "/etc/hosts", "/etc/hostname"}
+    expected_mount_points = {"/etc/resolv.conf", "/etc/hosts", "/etc/hostname"}
     found_mount_points = set(x.mountpoint for x in disk_partitions(all=True))
 
     return expected_mount_points.issubset(found_mount_points)
