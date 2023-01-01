@@ -8,6 +8,7 @@ jobs:
     call-build-image:
         uses: ./.github/workflows/build-image.yml
         strategy:
+            max-parallel: 1
             matrix:
                 ref: [ develop, master ]
         with:
