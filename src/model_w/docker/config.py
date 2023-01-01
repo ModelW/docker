@@ -49,11 +49,14 @@ class ApiProject(Project):
         Name of the WSGI module
     asgi
         Name of the ASGI module
+    celery
+        Name of the Celery module
     """
 
     server: str
     wsgi: str
     asgi: str
+    celery: str
 
 
 @dataclass
@@ -154,11 +157,12 @@ def guess_api_config(path: Path) -> Dict:
                 package_root = package["include"]
             required_files[f'{package["from"]}/{package["include"]}/__init__.py'] = ""
 
-    asgi = wsgi = ""
+    asgi = wsgi = celery = ""
 
     if package_root is not None:
         asgi = f"{package_root.replace('/', '.')}.django.asgi:application"
         wsgi = f"{package_root.replace('/', '/')}.django.wsgi:application"
+        celery = f"{package_root.replace('/', '.')}.django.celery:app"
 
     return {
         "project": {
@@ -168,6 +172,7 @@ def guess_api_config(path: Path) -> Dict:
             "required_files": required_files,
             "asgi": asgi,
             "wsgi": wsgi,
+            "celery": celery,
         },
         "apt": {
             "repos": {},

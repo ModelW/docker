@@ -40,7 +40,14 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> Namespace:
 
     subparsers.add_parser("install", help="Install the project's env")
     subparsers.add_parser("build", help="Build the project")
-    subparsers.add_parser("serve", help="Serve the project")
+
+    serve_parser = subparsers.add_parser("serve", help="Serve the project")
+    serve_parser.add_argument(
+        "variant",
+        nargs="?",
+        default="default",
+        help="Variant of the component to serve (default, celery, beat)",
+    )
 
     run_parser = subparsers.add_parser(
         "run",
@@ -79,7 +86,7 @@ def main(argv: Optional[Sequence[str]] = None):
     elif args.command == "build":
         build(config, args.root)
     elif args.command == "serve":
-        serve(config, args.root)
+        serve(config, args.root, args.variant)
     elif args.command == "run":
         run(config, args.root, args.bin, args.args)
 
