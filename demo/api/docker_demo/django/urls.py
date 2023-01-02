@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
-from docker_demo.people.views import MeViewSet
+from docker_demo.apps.people.views import MeViewSet
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
 admin.site.site_title = _("Docker Demo")
