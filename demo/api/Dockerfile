@@ -1,6 +1,6 @@
 FROM modelw-base-test
 
-COPY --chown=user poetry.lock pyproject.toml ./
+COPY --chown=user pyproject.toml poetry.lock ./
 
 RUN modelw-docker install
 

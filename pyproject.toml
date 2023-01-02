@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "modelw-docker"
-version = "2023.1.0b2"
+version = "2023.1.0b3"
 description = "Utility to simplify Dockerfiles"
 authors = ["Rémy Sanchez <remy.sanchez@hyperthese.net>"]
 license = "WTFPL"
@@ -14,7 +14,6 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Environment :: Console",
     "Intended Audience :: Developers",
-    "Operating System :: Linux",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Topic :: Software Development :: Build Tools",

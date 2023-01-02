@@ -27,8 +27,8 @@ with EnvManager(ModelWDjango()) as env:
     INSTALLED_APPS = [
         "drf_spectacular",
         "drf_spectacular_sidecar",
-        "docker_demo.core",
-        "docker_demo.people",
+        "docker_demo.apps.realtime",
+        "docker_demo.apps.people",
     ]
 
     # ---
