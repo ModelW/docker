@@ -45,6 +45,6 @@ jobs:
                   context: ./image
                   push: true
                   tags: |-
-                      ${{ secrets.DOCKER_USERNAME }}/base:${{ env.DOCKER_TAG }}
+                      modelw/base:${{ env.DOCKER_TAG }}
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
