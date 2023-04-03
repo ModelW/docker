@@ -66,6 +66,9 @@ RUN apt-get update  \
         libxcb1-dev \
         # NodeJS
         nodejs \
+        # Things required to use Weasyprint
+        libpango-1.0-0 \
+        libpangoft2-1.0-0 \
         # Stuff to allow configuration afterwards
         sudo \
     && apt-get upgrade -y \
