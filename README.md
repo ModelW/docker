@@ -3,7 +3,7 @@
 A tool so that your Dockerfile looks like this:
 
 ```Dockerfile
-FROM modelw/base:2023.01
+FROM modelw/base:2023.3.0
 
 COPY --chown=user package.json package-lock.json ./
 
