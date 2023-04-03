@@ -11,7 +11,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "~3.10"
-modelw-preset-django = {extras = ["celery", "channels"], version = "~2023.1.0b1"}
+modelw-preset-django = {extras = ["celery", "channels"], version = "~2023.3.0"}
 drf-spectacular = {extras = ["sidecar"], version = "^0.24.0"}
 
 [tool.poetry.dev-dependencies]
