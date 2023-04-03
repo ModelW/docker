@@ -66,6 +66,9 @@ RUN apt-get update  \
         libxcb1-dev \
         # NodeJS
         nodejs \
+        # Things required to use Weasyprint
+        libpango-1.0-0 \
+        libpangoft2-1.0-0 \
         # Stuff to allow configuration afterwards
         sudo \
     && apt-get upgrade -y \
@@ -98,7 +101,7 @@ ARG MODEL_W_PIP_EXTRA=""
 
 
 RUN python -m venv /opt/model-w \
-    && /opt/model-w/bin/python -m pip install --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker>=2023.1.0b4,<2023.4.0' \
+    && /opt/model-w/bin/python -m pip install --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker>=2023.3.0,<2023.4.0' \
     && ln -s /opt/model-w/bin/modelw-docker /usr/local/bin/modelw-docker
 
 RUN mkdir /code \
