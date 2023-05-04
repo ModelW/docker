@@ -173,6 +173,8 @@ def install_front(config: Config, path: Path) -> None:
 
     printer.chapter("Installing node dependencies")
 
+    printer.env_patch["BUILD_MODE"] = "true"
+
     printer.exec(
         "Installing dependencies",
         path,

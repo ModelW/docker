@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "modelw-docker"
-version = "2023.3.1"
+version = "2023.4.0b1"
 description = "Utility to simplify Dockerfiles"
 authors = ["Rémy Sanchez <remy.sanchez@hyperthese.net>"]
 license = "WTFPL"
@@ -27,6 +27,7 @@ modelw-docker = "model_w.docker.__main__:__main__"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+setuptools = "*"
 psutil = "^5.9.4"
 colorama = "^0.4.6"
 tomli = { version = "^2.0.1", python = "<3.11" }

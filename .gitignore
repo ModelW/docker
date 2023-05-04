@@ -239,4 +239,6 @@ sw.*
 # ---
 
 /repo
+/demo/api/poetry.lock
+/demo/front/package-lock.json
 .secrets

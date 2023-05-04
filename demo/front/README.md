@@ -14,6 +14,3 @@ const user = await $axios.$get("/back/api/me/");
 
 Doing so will make sure that the call works both on server-side and client-side
 (as we're working with a SSR app here).
-
-The plugin found in [`plugins/axios.js`](./plugins/axios.js) will take care of
-adding the CSRF tokens so that Django doesn't go crazy.

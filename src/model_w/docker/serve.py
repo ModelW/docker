@@ -198,16 +198,11 @@ def serve_front(path: Path) -> None:
     printer.chapter("Serving Nuxt project")
     port = getenv("PORT", "3000")
 
+    printer.env_patch.update({"HOST": "0.0.0.0", "PORT": f"{port}"})
     printer.handover(
         "Running Nuxt server",
         path,
-        [
-            *["npm", "run"],
-            "start",
-            "--",
-            *["--hostname", "0.0.0.0"],
-            *["--port", f"{port}"],
-        ],
+        ["node", ".output/server/index.mjs"],
     )
 
 

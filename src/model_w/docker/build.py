@@ -34,6 +34,8 @@ def build_front(path: Path) -> None:
 
     printer.chapter("Building Nuxt project")
 
+    printer.env_patch["BUILD_MODE"] = "true"
+
     printer.exec(
         "Running Nuxt build",
         path,
