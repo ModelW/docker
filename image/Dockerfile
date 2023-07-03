@@ -86,7 +86,7 @@ RUN apt-get update  \
 ENV PATH /usr/local/bin:$PATH
 ENV LANG C.UTF-8
 ENV GPG_KEY A035C8C19219BA821ECEA86B64E628F8D684696D
-ENV PYTHON_MAJOR_VERSION 3.10
+ENV PYTHON_MAJOR_VERSION 3.11
 
 COPY install_python.sh /tmp/install_python.sh
 
@@ -101,7 +101,7 @@ ARG MODEL_W_PIP_EXTRA=""
 
 
 RUN python -m venv /opt/model-w \
-    && /opt/model-w/bin/python -m pip install --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2023.4.0b4' \
+    && /opt/model-w/bin/python -m pip install --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2023.7.0' \
     && ln -s /opt/model-w/bin/modelw-docker /usr/local/bin/modelw-docker
 
 RUN mkdir /code \

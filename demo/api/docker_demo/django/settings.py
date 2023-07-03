@@ -68,4 +68,3 @@ with EnvManager(ModelWDjango()) as env:
         "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
         "REDOC_DIST": "SIDECAR",
     }
-
