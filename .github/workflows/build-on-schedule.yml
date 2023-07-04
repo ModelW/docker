@@ -10,7 +10,7 @@ jobs:
         strategy:
             max-parallel: 1
             matrix:
-                ref: [ develop, master, "support/2023.03", "support/2023.04", "support/2023.07" ]
+                ref: [ "support/2023.03", "support/2023.04", "support/2023.07" ]
         with:
             ref: ${{ matrix.ref }}
         secrets: inherit
