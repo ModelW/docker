@@ -2,7 +2,7 @@ name: Build on schedule
 
 on:
     schedule:
-        - cron: "42 * * * *"
+        - cron: "42 0 * * *"
 
 jobs:
     call-build-image:
