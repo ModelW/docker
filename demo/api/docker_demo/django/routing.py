@@ -1,4 +1,5 @@
 from django.urls import re_path
+
 from docker_demo.apps.realtime.consumers import PassiveAggressiveConsumer
 
 websocket_urlpatterns = [
