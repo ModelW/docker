@@ -4,6 +4,7 @@ This handles the API and back-office admin.
 
 All the URLs pointing to this are prefixed by `/back`.
 
+
 ## Components
 
 You'll find the following apps:
@@ -11,7 +12,11 @@ You'll find the following apps:
 -   [people](./docker_demo/apps/people) &mdash; The user model and
     authentication.
 
--   [realtime](./docker_demo/apps/realtime) &mdash; Deals with websockets
+
+-   [realtime](./docker_demo/apps/realtime) &mdash; Deals with
+    websockets
+
+
 
 ## OpenAPI
 
