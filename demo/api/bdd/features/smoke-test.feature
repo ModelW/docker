@@ -15,7 +15,6 @@ Feature: Smoke test for the site
             | Authentication and Authorization | Groups        |
             | Celery Results                   | Group Results |
             | Celery Results                   | Task Results  |
-            | Taggit                           | Tags          |
 
     Scenario Outline: Needs correct log in to access Django admin
         Given I am on the /back/admin page
