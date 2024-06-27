@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "modelw-docker"
-version = "2024.4.0"
+version = "2024.7.0b1"
 description = "Utility to simplify Dockerfiles"
 authors = ["Rémy Sanchez <remy.sanchez@hyperthese.net>"]
 license = "WTFPL"
