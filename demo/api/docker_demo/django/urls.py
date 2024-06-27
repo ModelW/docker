@@ -18,6 +18,7 @@ else:
 router.register("me", MeViewSet, basename="me")
 
 urlpatterns = [
+    path("back/_/ht/", include("docker_demo.apps.health.urls")),
     path("back/admin/", admin.site.urls),
     path("back/api/", include(router.urls)),
 ]

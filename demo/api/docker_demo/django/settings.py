@@ -1,3 +1,4 @@
+from datetime import timedelta
 from importlib import metadata
 
 from model_w.env_manager import EnvManager
@@ -29,6 +30,7 @@ with EnvManager(ModelWDjango()) as env:
         "drf_spectacular_sidecar",
         "docker_demo.apps.realtime",
         "docker_demo.apps.people",
+        "docker_demo.apps.health",
     ]
 
     # ---
@@ -69,3 +71,21 @@ with EnvManager(ModelWDjango()) as env:
         "REDOC_DIST": "SIDECAR",
     }
 
+
+    # ---
+    # Celery tasks to control celery and celery beat health
+    # ---
+    CELERY_BEAT_SCHEDULE = {
+        "log-beat": {
+            "task": "docker_demo.apps.health.tasks.log_beat",
+            "schedule": timedelta(minutes=1),
+        },
+        "clean-health-log": {
+            "task": "docker_demo.apps.health.tasks.clear_log",
+            "schedule": timedelta(hours=1),
+        },
+        "check-status": {
+            "task": "docker_demo.apps.health.tasks.check_status",
+            "schedule": timedelta(minutes=1),
+        },
+    }
