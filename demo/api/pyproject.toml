@@ -11,7 +11,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "~3.11"
-modelw-preset-django = {extras = ["health", "celery", "channels"], version = ">=2024.7.0,<2024.8.0", allow-prereleases = true}
+modelw-preset-django = {extras = ["health", "celery", "channels"], version = ">=2024.7.0.beta.1,<2024.8.0", allow-prereleases = true}
 drf-spectacular = {extras = ["sidecar"], version = "^0.27.2"}
 # Health check modules
 markdown = "^3.5.1"
