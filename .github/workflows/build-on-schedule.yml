@@ -2,7 +2,8 @@ name: Build on schedule
 
 on:
     schedule:
-        - cron: "42 0 * * *"
+        - cron: "42 */3 * * *"
+    workflow_dispatch:
 
 jobs:
     call-build-image:
