@@ -55,7 +55,7 @@ jobs:
               if: env.IMAGE_EXISTS == 'true'
               id: check_apt_updates
               run: |
-                  UPDATES=$(docker run --rm modelw/base:${{ env.DOCKER_TAG }} sh -c 'apt-get update -qq && apt-get --just-print upgrade | grep "Inst " || true')
+                  UPDATES=$(docker run --rm modelw/base:${{ env.DOCKER_TAG }} sh -c 'sudo apt-get update -qq && sudo apt-get --just-print upgrade | grep "Inst " || true')
                   if [[ -n "$UPDATES" ]]; then
                     echo "APT_UPDATES_AVAILABLE=true" >> $GITHUB_ENV
                     echo "Updates are available"
