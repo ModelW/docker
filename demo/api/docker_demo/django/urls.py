@@ -46,4 +46,5 @@ if settings.DEBUG:
             SpectacularRedocView.as_view(url_name="schema"),
             name="redoc",
         ),
+        path("back/__debug__/", include("debug_toolbar.urls")),
     ] + urlpatterns

@@ -15,16 +15,15 @@ jobs:
               uses: actions/checkout@v3
               with:
                   ref: ${{ inputs.ref }}
+
             - name: Extract branch name
               shell: bash
               env:
                   MODELW_REF: ${{ inputs.ref }}
               run: |
-                  echo GITHUB_ENV="$GITHUB_ENV"
-                  echo GITHUB_OUTPUT="$GITHUB_OUTPUT"
                   echo "DOCKER_TAG=$(echo ${MODELW_REF#refs/heads/} | sed -E 's/^support\///' | sed 's/^master$/latest/')" >> $GITHUB_ENV
-                  cat $GITHUB_ENV
               id: extract_branch
+
             - name: Print debug info
               env:
                   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -32,19 +31,100 @@ jobs:
               run: |
                   echo DOCKER_TAG=$DOCKER_TAG
                   echo DOCKER_USERNAME=$DOCKER_USERNAME
+
+            # Check if the Docker image already exists
+            - name: Check if Docker image exists
+              id: check_docker_image
+              shell: bash
+              env:
+                  DOCKER_TAG: ${{ env.DOCKER_TAG }}
+              run: |
+                  IMAGE=modelw/base
+                  TAG=${DOCKER_TAG}
+                  STATUS=$(curl -sL -o /dev/null -w "%{http_code}" "https://hub.docker.com/v2/repositories/$IMAGE/tags/$TAG")
+                  if [ "$STATUS" -eq 200 ]; then
+                    echo "IMAGE_EXISTS=true" >> $GITHUB_ENV
+                    echo "Image exists"
+                  else
+                    echo "IMAGE_EXISTS=false" >> $GITHUB_ENV
+                    echo "Image does not exist"
+                  fi
+
+            # Check for available package updates if the image exists
+            - name: Check for apt updates in image
+              if: env.IMAGE_EXISTS == 'true'
+              id: check_apt_updates
+              run: |
+                  UPDATES=$(docker run --rm modelw/base:${{ env.DOCKER_TAG }} sh -c 'sudo apt-get update -qq && sudo apt-get --just-print upgrade | grep "Inst " || true')
+                  if [[ -n "$UPDATES" ]]; then
+                    echo "APT_UPDATES_AVAILABLE=true" >> $GITHUB_ENV
+                    echo "Updates are available"
+                  else
+                    echo "APT_UPDATES_AVAILABLE=false" >> $GITHUB_ENV
+                    echo "No updates available"
+                  fi
+
+            # Get the installed Python version in the image
+            - name: Get Python version in image
+              if: env.IMAGE_EXISTS == 'true'
+              run: |
+                  INSTALLED_VERSION=$(docker run --rm modelw/base:${{ env.DOCKER_TAG }} python3 --version | cut -d ' ' -f 2)
+                  echo "INSTALLED_PYTHON_VERSION=$INSTALLED_VERSION" >> $GITHUB_ENV
+
+            # Check if a newer Python patch version is available
+            - name: Check for latest Python patch version
+              if: env.IMAGE_EXISTS == 'true'
+              run: |
+                  INSTALLED_VERSION=${{ env.INSTALLED_PYTHON_VERSION }}
+                  MINOR_VERSION=$(echo "$INSTALLED_VERSION" | cut -d. -f1,2)
+                  VERSIONS=$(curl -s https://www.python.org/ftp/python/ | grep -Eo 'href="([0-9]+\.[0-9]+\.[0-9]+)/"' | cut -d'"' -f2 | tr -d '/')
+                  LATEST_VERSION=$(echo "$VERSIONS" | grep "^$MINOR_VERSION\." | sort -V | tail -n1)
+                  echo "INSTALLED_VERSION=$INSTALLED_VERSION"
+                  echo "LATEST_VERSION=$LATEST_VERSION"
+                  if [ "$INSTALLED_VERSION" != "$LATEST_VERSION" ]; then
+                    echo "PYTHON_UPDATE_AVAILABLE=true" >> $GITHUB_ENV
+                    echo "Python update available"
+                  else
+                    echo "PYTHON_UPDATE_AVAILABLE=false" >> $GITHUB_ENV
+                    echo "Python is up to date"
+                  fi
+
+            # Decide whether to proceed with the build
+            - name: Decide whether to build
+              run: |
+                  if [ "${{ env.IMAGE_EXISTS }}" == "false" ] || [ "${{ env.APT_UPDATES_AVAILABLE }}" == "true" ] || [ "${{ env.PYTHON_UPDATE_AVAILABLE }}" == "true" ]; then
+                    echo "SHOULD_BUILD=true" >> $GITHUB_ENV
+                    echo "Will proceed to build"
+                  else
+                    echo "SHOULD_BUILD=false" >> $GITHUB_ENV
+                    echo "No need to build"
+                  fi
+
+            # Set up Docker Buildx if we should build
             - name: Set up Docker Buildx
+              if: env.SHOULD_BUILD == 'true'
               uses: docker/setup-buildx-action@v2
+
+            # Login to Docker Hub if we should build
             - name: Login to Docker Hub
-              uses: docker/login-action@v2
+              if: env.SHOULD_BUILD == 'true'
+              uses: docker/login-action@v3
               with:
                   username: ${{ secrets.DOCKER_USERNAME }}
                   password: ${{ secrets.DOCKER_TOKEN }}
+
+            # Build and push the image if we should build
             - name: Build and push
+              if: env.SHOULD_BUILD == 'true'
               uses: docker/build-push-action@v3
               with:
                   context: ./image
                   push: true
-                  tags: |-
-                      modelw/base:${{ env.DOCKER_TAG }}
+                  tags: "modelw/base:${{ env.DOCKER_TAG }}"
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
+
+            # Indicate if the build was skipped
+            - name: Build skipped
+              if: env.SHOULD_BUILD == 'false'
+              run: echo "Build skipped as the image is up to date"
