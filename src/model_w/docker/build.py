@@ -27,17 +27,17 @@ def build_api(path: Path) -> None:
 
 def build_front(path: Path) -> None:
     """
-    Getting Nuxt to compile itself
+    Compile the front with npm run build
     """
 
     printer = Printer.instance()
 
-    printer.chapter("Building Nuxt project")
+    printer.chapter("Building front project")
 
     printer.env_patch["BUILD_MODE"] = "true"
 
     printer.exec(
-        "Running Nuxt build",
+        "Running front build script",
         path,
         ["npm", "run", "build"],
     )
