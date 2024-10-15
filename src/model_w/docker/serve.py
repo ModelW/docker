@@ -185,7 +185,9 @@ def serve_api(config: Config, path: Path, variant: str) -> None:
 
 def serve_front(path: Path) -> None:
     """
-    Simply start the Nuxt server.
+    Start the front server.
+    SvelteKit and Nuxt are both supported, so we check if the project has a
+    SvelteKit `build` directory, and if not, we use Nuxt's `output` directory.
 
     We bind on 0.0.0.0 because we need the flow to be accessible from outside
     the container.
@@ -199,15 +201,26 @@ def serve_front(path: Path) -> None:
     printer = Printer.instance()
 
     printer.chapter("Serving front project")
+
+    nuxt_path ='.output/server/index.mjs'
+    sveltekit_path = 'build'
+
     port = getenv("PORT", "3000")
 
     printer.env_patch.update({"HOST": "0.0.0.0", "PORT": f"{port}"})
-    printer.handover(
-        "Running front server",
-        path,
-        ["node", ".output/server/index.mjs"],
-    )
 
+    if (path / nuxt_path).exists():
+        printer.handover(
+            "Running Nuxt server",
+            path,
+            ["node", nuxt_path],
+        )
+    else:
+        printer.handover(
+            "Running SvelteKit server",
+            path,
+            ["node", sveltekit_path],
+        )
 
 def serve(config: Config, path: Path, variant: str) -> None:
     """
