@@ -101,7 +101,7 @@ ARG MODEL_W_PIP_EXTRA=""
 
 
 RUN python -m venv /opt/model-w \
-    && /opt/model-w/bin/python -m pip install --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2024.10.0' \
+    && /opt/model-w/bin/python -m pip install --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2024.10.1' \
     && ln -s /opt/model-w/bin/modelw-docker /usr/local/bin/modelw-docker
 
 RUN mkdir /code \
