@@ -1,0 +1,60 @@
+---
+# Start the demo project in Docker for a sanity check
+# Note: It's expected that you have ran the make commands to build the images
+# and they exist in your local Docker registry
+
+services:
+
+
+  postgres:
+    image: postgres:15-alpine
+    env_file:
+      - "./api/.env.test"
+    network_mode: "host"
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  redis:
+    image: redis:7-alpine
+    network_mode: "host"
+    healthcheck:
+      test: redis-cli ping
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  api:
+    image: modelw-base-test-api:latest
+    depends_on:
+      front:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - "./api/.env.test"
+    network_mode: "host"
+
+  front:
+    image: modelw-base-test-front:latest
+    env_file:
+      - "./front/.env.test"
+    network_mode: "host"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/non-cms/"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  router:
+    image: nginx:alpine
+    network_mode: "host"
+    volumes:
+      - ./api/bdd/_infrastructure/mock-digital-ocean-router.conf:/etc/nginx/nginx.conf      
