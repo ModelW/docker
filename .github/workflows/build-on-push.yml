@@ -12,4 +12,5 @@ jobs:
         uses: ./.github/workflows/build-image.yml
         with:
             ref: ${{ github.ref }}
+            skip_check: true
         secrets: inherit
