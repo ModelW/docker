@@ -19,7 +19,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update  \
     && apt-get install -y curl ca-certificates gnupg apt-transport-https lsb-release \
     && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor --output /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg \
-    && curl https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor --output /etc/apt/trusted.gpg.d/nodesource.gpg
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | sh
 
 COPY ./sources.list /etc/apt/sources.list
 
