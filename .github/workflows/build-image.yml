@@ -6,7 +6,10 @@ on:
             ref:
                 required: true
                 type: string
-
+            skip_check:
+                required: false
+                type: boolean
+                default: false
 jobs:
     docker:
         runs-on: ubuntu-latest
@@ -92,7 +95,7 @@ jobs:
             # Decide whether to proceed with the build
             - name: Decide whether to build
               run: |
-                  if [ "${{ env.IMAGE_EXISTS }}" == "false" ] || [ "${{ env.APT_UPDATES_AVAILABLE }}" == "true" ] || [ "${{ env.PYTHON_UPDATE_AVAILABLE }}" == "true" ]; then
+                  if [ "${{ inputs.skip_check }}" == "true" ] || "${{ env.IMAGE_EXISTS }}" == "false" ] || [ "${{ env.APT_UPDATES_AVAILABLE }}" == "true" ] || [ "${{ env.PYTHON_UPDATE_AVAILABLE }}" == "true" ]; then
                     echo "SHOULD_BUILD=true" >> $GITHUB_ENV
                     echo "Will proceed to build"
                   else

@@ -19,7 +19,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update  \
     && apt-get install -y curl ca-certificates gnupg apt-transport-https lsb-release \
     && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor --output /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg \
-    && curl https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor --output /etc/apt/trusted.gpg.d/nodesource.gpg
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | sh
 
 COPY ./sources.list /etc/apt/sources.list
 
@@ -101,7 +101,7 @@ ARG MODEL_W_PIP_EXTRA=""
 
 
 RUN python -m venv /opt/model-w \
-    && /opt/model-w/bin/python -m pip install --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2024.10.1' \
+    && /opt/model-w/bin/python -m pip install --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2025.1.0b1' \
     && ln -s /opt/model-w/bin/modelw-docker /usr/local/bin/modelw-docker
 
 RUN mkdir /code \
