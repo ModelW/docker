@@ -19,7 +19,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update  \
     && apt-get install -y curl ca-certificates gnupg apt-transport-https lsb-release \
     && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor --output /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg \
-    && curl -fsSL https://deb.nodesource.com/setup_20.x | sh
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | sh
 
 COPY ./sources.list /etc/apt/sources.list
 
@@ -85,8 +85,8 @@ RUN apt-get update  \
 
 ENV PATH /usr/local/bin:$PATH
 ENV LANG C.UTF-8
-ENV GPG_KEY A035C8C19219BA821ECEA86B64E628F8D684696D
-ENV PYTHON_MAJOR_VERSION 3.11
+ENV GPG_KEY 7169605F62C751356D054A26A821E680E5FA6305
+ENV PYTHON_MAJOR_VERSION 3.12
 
 COPY install_python.sh /tmp/install_python.sh
 
@@ -101,7 +101,7 @@ ARG MODEL_W_PIP_EXTRA=""
 
 
 RUN python -m venv /opt/model-w \
-    && /opt/model-w/bin/python -m pip install --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2025.1.0b1' \
+    && /opt/model-w/bin/python -m pip install --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2025.1.0' \
     && ln -s /opt/model-w/bin/modelw-docker /usr/local/bin/modelw-docker
 
 RUN mkdir /code \

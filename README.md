@@ -97,7 +97,7 @@ In addition, Python project also have the following settings:
 ```toml
 [project]
 # [...]
-# Either "gunicorn" or "daphne"
+# Either "gunicorn", "daphne" or "granian"
 server = "daphne"
 
 # Modules that have the WSGI and ASGI entry points

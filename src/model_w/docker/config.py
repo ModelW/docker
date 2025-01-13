@@ -1,7 +1,7 @@
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Type, TypeVar, Union
+from typing import Any, Dict, Literal, Type, TypeVar, Union
 
 from colorama import Style
 from typefit import Fitter
@@ -44,7 +44,7 @@ class ApiProject(Project):
     Other Parameters
     ----------------
     server
-        Name of the server that's going to be running (gunicorn or daphne)
+        Name of the server that's going to be running (gunicorn, daphne or granian)
     wsgi
         Name of the WSGI module
     asgi
@@ -144,6 +144,8 @@ def guess_api_config(path: Path) -> Dict:
 
     poetry = pp.get("tool", {}).get("poetry", {})
     has_daphne = any(x["name"] == "daphne" for x in lock["package"])
+    has_gunicorn = any(x["name"] == "gunicorn" for x in lock["package"])
+    
     required_files = {}
     package_root = None
 
@@ -166,15 +168,28 @@ def guess_api_config(path: Path) -> Dict:
     asgi = wsgi = celery = ""
 
     if package_root is not None:
-        asgi = f"{package_root.replace('/', '.')}.django.asgi:application"
-        wsgi = f"{package_root.replace('/', '.')}.django.wsgi:application"
-        celery = f"{package_root.replace('/', '.')}.django.celery:app"
+        asgi_path = path / package_root / "django" / "asgi.py"
+        wsgi_path = path / package_root / "django" / "wsgi.py"
+        celery_path = path / package_root / "django" / "celery.py"
+        
+        asgi = f"{package_root.replace('/', '.')}.django.asgi:application" if asgi_path.exists() else ""
+        wsgi = f"{package_root.replace('/', '.')}.django.wsgi:application" if wsgi_path.exists() else ""
+        celery = f"{package_root.replace('/', '.')}.django.celery:app" if celery_path.exists() else ""
+
+
+    # Currently, we support 3 servers, but will drop Daphne and Gunicorn in the future.
+    # Daphne and Gunicorn will not be installed by the preset, but by the project to override the preset.
+    server = "granian"
+    if has_daphne:
+        server = "daphne"
+    elif has_gunicorn:
+        server = "gunicorn"
 
     return {
         "project": {
             "name": poetry.get("name"),
             "component": "api",
-            "server": "daphne" if has_daphne else "gunicorn",
+            "server": server,
             "required_files": required_files,
             "asgi": asgi,
             "wsgi": wsgi,

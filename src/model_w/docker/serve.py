@@ -31,6 +31,8 @@ def serve_api_default(config: Config, path: Path) -> None:
     """
     Depending on if we're running gunicorn (for WSGI websites) or daphne
     (for ASGI websites), generate and run the appropriate command line.
+    There is also a granian option for ASGI both WSGI, which will become the
+    default in the future, when Gunicorn/Daphne will be removed.
 
     We bind on 0.0.0.0 because we need the flow to be accessible from outside
     the container.
@@ -57,7 +59,7 @@ def serve_api_default(config: Config, path: Path) -> None:
             )
 
         printer.handover(
-            f"Starting gunicorn (port {port})",
+            f"Starting gunicorn (port {port}). WARNING: Gunicorn is deprecated and will be removed in the future. Use granian instead.",
             path,
             [
                 "poetry",
@@ -82,7 +84,7 @@ def serve_api_default(config: Config, path: Path) -> None:
             )
 
         printer.handover(
-            f"Starting daphne (port {port})",
+            f"Starting daphne (port {port}). WARNING: Daphne is deprecated and will be removed in the future. Use granian instead.",
             path,
             [
                 "poetry",
@@ -93,6 +95,35 @@ def serve_api_default(config: Config, path: Path) -> None:
                 config.project.asgi,
             ],
         )
+    elif config.project.server == "granian":
+        run_command = [
+            "poetry",
+            "run",
+            *["python", "-m", "granian"],
+            *["--host", "0.0.0.0"],
+            *["--port", f"{port}"],
+            *["--access-log"],
+        ]
+        if config.project.asgi:
+            printer.handover(
+                f"Starting granian ASGI (port {port})",
+                path,
+                [
+                    *run_command,
+                    *["--interface", "asgi"],
+                    config.project.asgi,
+                ],
+            )
+        else:
+            printer.handover(
+                f"Starting granian WSGI (port {port})",
+                path,
+                [
+                    *run_command,
+                    *["--interface", "wsgi"],
+                    config.project.wsgi,
+                ],
+            )
     else:
         raise UserException(f"Unknown server: {config.project.server}")
 
@@ -202,8 +233,8 @@ def serve_front(path: Path) -> None:
 
     printer.chapter("Serving front project")
 
-    nuxt_path ='.output/server/index.mjs'
-    sveltekit_path = 'build'
+    nuxt_path = ".output/server/index.mjs"
+    sveltekit_path = "build"
 
     port = getenv("PORT", "3000")
 
@@ -221,6 +252,7 @@ def serve_front(path: Path) -> None:
             path,
             ["node", sveltekit_path],
         )
+
 
 def serve(config: Config, path: Path, variant: str) -> None:
     """

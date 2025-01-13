@@ -1,0 +1,68 @@
+---
+# Start the demo project in Docker for a sanity check
+# Note: It's expected that you have ran the make command to build the base image
+# and it exists in your local Docker registry
+
+services:
+
+  postgres:
+    image: postgres:15-alpine
+    env_file:
+      - "./demo/api/.env.test"
+    network_mode: "host"
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  redis:
+    image: redis:7-alpine
+    network_mode: "host"
+    healthcheck:
+      test: redis-cli ping
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  api:
+    build:
+      context: ./demo/api
+    image: modelw-base-test-api:latest
+    depends_on:
+      front:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - "./demo/api/.env.test"
+    network_mode: "host"
+    command: >
+      sh -c "
+      modelw-docker run python manage.py migrate &&
+      modelw-docker serve
+      "
+
+  front:
+    build:
+      context: ./demo/front
+    image: modelw-base-test-front:latest
+    env_file:
+      - "./demo/front/.env.test"
+    network_mode: "host"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/non-cms/"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  router:
+    image: nginx:alpine
+    network_mode: "host"
+    volumes:
+      - ./demo/api/bdd/_infrastructure/mock-digital-ocean-router.conf:/etc/nginx/nginx.conf      
