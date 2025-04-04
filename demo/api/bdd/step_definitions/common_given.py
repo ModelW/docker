@@ -71,15 +71,6 @@ def on_page(page_name: str, page: Page, front_server: str):
     page.goto(str(page_url))
 
 
-@given(parsers.cfparse("I am logged in as a CMS admin"))
-def logged_in_as_cms_admin(page: Page, front_server: str):
-    """Log in as an admin to the CMS."""
-    on_page("back/", page, front_server)
-    page.locator('input[name="username"]').fill("good@user.com")
-    page.locator('input[name="password"]').fill("correct")
-    page.locator('button[type="submit"]').click()
-
-
 @given(parsers.cfparse("I am logged in as a Django admin"))
 def logged_in_as_django_admin(page: Page, front_server):
     """Log in as an admin to Django."""
@@ -113,5 +104,7 @@ def the_following_user(datatable_vertical: str, django_user_model: AbstractBaseU
         django_user_model.objects.create_superuser(**datatable)
     else:
         django_user_model.objects.create_user(**datatable)
+
+
 
 

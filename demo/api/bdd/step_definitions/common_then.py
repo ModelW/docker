@@ -37,9 +37,9 @@ def text_should_be_colour(page: Page, text: str, colour: str):
         }""",
     )
 
-    assert (
-        actual_colour == colour
-    ), f"Actual colour: {actual_colour}, Expected colour: {colour}"
+    assert actual_colour == colour, (
+        f"Actual colour: {actual_colour}, Expected colour: {colour}"
+    )
 
 
 @then(parsers.cfparse('I should be at the URL "{url}"'))
@@ -64,16 +64,18 @@ def at_exact_url(url: str, page: Page, front_server: str, live_server: LiveServe
     # Map special URLs as required, else use the supplied URL
     SPECIAL_URLS = {
         "<API_URL>": live_server.url,
-        "<FRONT_URL>": front_server.rstrip("/")
-        if not front_server.endswith(":80")
-        else front_server.split(":80")[0],
+        "<FRONT_URL>": (
+            front_server.rstrip("/")
+            if not front_server.endswith(":80")
+            else front_server.split(":80")[0]
+        ),
     }
 
     for key, value in SPECIAL_URLS.items():
         url = url.replace(key, value)
 
     # Check with and without trailing slashes
-    expect(page).to_have_url(re.compile(f"{url}/?$"))
+    expect(page).to_have_url(re.compile(f"{re.escape(url)}/?$"))
 
 
 @then(parsers.cfparse('I should be at a URL with "{url}"'))
@@ -142,6 +144,13 @@ def element_should_contain_text(data_testid: str, text: str, page: Page):
     expect(page.get_by_test_id(data_testid)).to_have_text(text)
 
 
+@then(parsers.cfparse('the page title should be "{text}"'))
+@then(parsers.cfparse('I should see the page title as "{text}"'))
+def should_see_page_title(page: Page, text: str):
+    """Check the page title."""
+    expect(page).to_have_title(text)
+
+
 @then("there should be no console errors")
 def should_be_no_console_errors(page: Page, console: ConsoleMessage):
     """Check the console for any errors."""
@@ -179,3 +188,5 @@ def should_see_admin_models(page: Page, datatable):
         # Find the model element within the table
         model_element = model_table.locator("a").get_by_text(model_name)
         expect(model_element).to_be_visible()
+
+
