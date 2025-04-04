@@ -102,7 +102,6 @@ def serve_api_default(config: Config, path: Path) -> None:
             *["python", "-m", "granian"],
             *["--host", "0.0.0.0"],
             *["--port", f"{port}"],
-            *["--access-log"],
         ]
         if config.project.asgi:
             printer.handover(

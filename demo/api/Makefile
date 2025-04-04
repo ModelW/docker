@@ -1,4 +1,4 @@
-.PHONY: format black isort celery_run dev_stack docker_test
+.PHONY: format black isort procrastinate_run dev_stack docker_test
 
 PYTHON_BIN ?= poetry run python
 
@@ -10,11 +10,17 @@ black:
 isort:
 	$(PYTHON_BIN) -m isort .
 
-celery_run:
-	poetry run celery --app docker_demo.django.celery:app worker --loglevel=INFO --beat
+procrastinate_run:
+	$(PYTHON_BIN) ./manage.py procrastinate worker
 
 dev_stack:
 	docker compose -p docker_demo -f ./bdd/_infrastructure/docker-compose-e2e.yaml up postgres redis --force-recreate --abort-on-container-exit --remove-orphans
+
+destroy_stack:
+	docker compose -p docker_demo -f ./bdd/_infrastructure/docker-compose-e2e.yaml down postgres redis
+
+performance_test:
+	./bdd/performance/test_performance.sh
 
 docker_test:
 	docker compose -p docker_demo -f ./bdd/_infrastructure/docker-compose-e2e.yaml up --build --force-recreate --abort-on-container-exit --remove-orphans ; python -m webbrowser -t "./bdd/report/results/report.html"

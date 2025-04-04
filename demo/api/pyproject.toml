@@ -11,7 +11,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "~3.12"
-modelw-preset-django = {extras = ["health", "celery", "channels", "psycopg2"], version = ">=2025.1.0,<2025.2.0"} 
+modelw-preset-django = {extras = ["psycopg", "health", "procrastinate", "channels"], version = ">=2025.4.0,<2025.5.0"}
 drf-spectacular = {extras = ["sidecar"], version = "*"}
 # Health check modules
 markdown = "*"
@@ -28,7 +28,7 @@ django-debug-toolbar = "*"
 node-edge = {version = "^0.1.0b6", allow-prereleases = true}
 psutil = "*"
 pytest = "*"
-pytest-bdd = "*"
+pytest-bdd = "^7.0.0"
 pytest-django = "*"
 pytest-html = "*"
 pytest-playwright = "*"
@@ -47,7 +47,7 @@ log_file = "bdd/report/results/test.log"
 addopts = ["--output", "bdd/report/results/media", "--screenshot", "on", "--full-page-screenshot", "--video", "on", "--tracing", "retain-on-failure", "--cucumberjson=bdd/report/results/report.json", "--html=bdd/report/results/pytest.html"]
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py312"
 
 [tool.ruff.lint.per-file-ignores]
 "**/bdd/**" = ["ARG001", "S101"]
