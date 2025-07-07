@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "modelw-docker"
-version = "2025.4.0"
+version = "2025.7.0"
 description = "Utility to simplify Dockerfiles"
 authors = ["Rémy Sanchez <remy.sanchez@hyperthese.net>"]
 license = "WTFPL"
@@ -15,7 +15,7 @@ classifiers = [
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Build Tools",
     "Topic :: Utilities",
     "Framework :: Django",
@@ -26,11 +26,10 @@ classifiers = [
 modelw-docker = "model_w.docker.__main__:__main__"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.13"
 setuptools = "*"
 psutil = "^5.9.5"
 colorama = "^0.4.6"
-tomli = { version = "^2.0.1", python = "<3.12" }
 typefit = "^1.0.0"
 
 

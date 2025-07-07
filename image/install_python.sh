@@ -32,7 +32,6 @@ gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"
     --enable-option-checking=fatal \
     --enable-shared \
     --with-lto \
-    --with-system-expat
 
 nproc="$(nproc)"
 make -j "$nproc"
