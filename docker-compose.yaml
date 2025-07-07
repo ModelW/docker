@@ -9,7 +9,6 @@ services:
     image: postgres:15-alpine
     env_file:
       - "./demo/api/.env.test"
-    network_mode: "host"
     healthcheck:
       test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
       interval: 5s
@@ -19,7 +18,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    network_mode: "host"
     healthcheck:
       test: redis-cli ping
       interval: 5s
@@ -40,7 +38,14 @@ services:
         condition: service_healthy
     env_file:
       - "./demo/api/.env.test"
-    network_mode: "host"
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://api:8000/back/admin/login/"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
     command: >
       sh -c "
       modelw-docker run python manage.py migrate &&
@@ -53,7 +58,8 @@ services:
     image: modelw-base-test-front:latest
     env_file:
       - "./demo/front/.env.test"
-    network_mode: "host"
+    expose:
+      - "3000"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/non-cms/"]
       interval: 5s
@@ -63,6 +69,19 @@ services:
 
   router:
     image: nginx:alpine
-    network_mode: "host"
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      front:
+        condition: service_healthy
+      api:
+        condition: service_healthy
     volumes:
-      - ./demo/api/bdd/_infrastructure/mock-digital-ocean-router.conf:/etc/nginx/nginx.conf      
+      - ./demo/api/bdd/_infrastructure/mock-digital-ocean-router.conf:/etc/nginx/nginx.conf
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://router:80/favicon.png"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
