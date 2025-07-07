@@ -25,68 +25,68 @@ COPY ./sources.list /etc/apt/sources.list
 
 RUN apt-get update  \
     && apt-get install -y \
-        # Common project dependencies
-        libpcre3 \
-        libpcre3-dev \
-        mime-support \
-        postgresql-client \
-        libpq-dev \
-        gdal-bin \
-        gdal-data \
-        # Things required to build Python
-        build-essential \
-        gcc \
-        g++ \
-        make \
-        libssl-dev  \
-        zlib1g-dev \
-        libbz2-dev  \
-        libreadline-dev  \
-        libsqlite3-dev  \
-        llvm \
-        libncursesw5-dev \
-        xz-utils  \
-        tk-dev  \
-        libxml2-dev  \
-        libxmlsec1-dev  \
-        libffi-dev  \
-        liblzma-dev \
-        # Things required to build Pillow
-        libtiff5-dev  \
-        libjpeg-dev  \
-        libopenjp2-7-dev  \
-        zlib1g-dev \
-        libfreetype6-dev  \
-        liblcms2-dev  \
-        libwebp-dev  \
-        tcl8.6-dev  \
-        tk8.6-dev  \
-        libharfbuzz-dev  \
-        libfribidi-dev  \
-        libxcb1-dev \
-        # NodeJS
-        nodejs \
-        # Things required to use Weasyprint
-        libpango-1.0-0 \
-        libpangoft2-1.0-0 \
-        # Stuff to allow configuration afterwards
-        sudo \
+    # Common project dependencies
+    libpcre3 \
+    libpcre3-dev \
+    mime-support \
+    postgresql-client \
+    libpq-dev \
+    gdal-bin \
+    gdal-data \
+    # Things required to build Python
+    build-essential \
+    gcc \
+    g++ \
+    make \
+    libssl-dev  \
+    zlib1g-dev \
+    libbz2-dev  \
+    libreadline-dev  \
+    libsqlite3-dev  \
+    llvm \
+    libncursesw5-dev \
+    xz-utils  \
+    tk-dev  \
+    libxml2-dev  \
+    libxmlsec1-dev  \
+    libffi-dev  \
+    liblzma-dev \
+    # Things required to build Pillow
+    libtiff5-dev  \
+    libjpeg-dev  \
+    libopenjp2-7-dev  \
+    zlib1g-dev \
+    libfreetype6-dev  \
+    liblcms2-dev  \
+    libwebp-dev  \
+    tcl8.6-dev  \
+    tk8.6-dev  \
+    libharfbuzz-dev  \
+    libfribidi-dev  \
+    libxcb1-dev \
+    # NodeJS
+    nodejs \
+    # Things required to use Weasyprint
+    libpango-1.0-0 \
+    libpangoft2-1.0-0 \
+    # Stuff to allow configuration afterwards
+    sudo \
     && apt-get upgrade -y \
     && rm -fr \
-        /var/log/alternatives.log \
-        /var/log/apt/history.log \
-        /var/log/apt/term.log \
-        /var/log/bootstrap.log \
-        /var/log/dpkg.log \
-        /var/cache/man \
-        /var/cache/ldconfig/aux-cache \
-        /etc/machine-id \
-        /var/cache/apt
+    /var/log/alternatives.log \
+    /var/log/apt/history.log \
+    /var/log/apt/term.log \
+    /var/log/bootstrap.log \
+    /var/log/dpkg.log \
+    /var/cache/man \
+    /var/cache/ldconfig/aux-cache \
+    /etc/machine-id \
+    /var/cache/apt
 
 ENV PATH /usr/local/bin:$PATH
 ENV LANG C.UTF-8
 ENV GPG_KEY 7169605F62C751356D054A26A821E680E5FA6305
-ENV PYTHON_MAJOR_VERSION 3.12
+ENV PYTHON_MAJOR_VERSION 3.13
 
 COPY install_python.sh /tmp/install_python.sh
 

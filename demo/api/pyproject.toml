@@ -10,8 +10,8 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "~3.12"
-modelw-preset-django = {extras = ["psycopg", "health", "procrastinate", "channels"], version = ">=2025.4.0,<2025.5.0"}
+python = "~3.13"
+modelw-preset-django = {extras = ["psycopg", "health", "procrastinate", "channels"], version = ">=2025.7.0,<2025.8.0"}
 drf-spectacular = {extras = ["sidecar"], version = "*"}
 # Health check modules
 markdown = "*"
