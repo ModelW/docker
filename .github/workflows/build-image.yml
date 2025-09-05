@@ -80,11 +80,15 @@ jobs:
               run: |
                   INSTALLED_VERSION=${{ env.INSTALLED_PYTHON_VERSION }}
                   MINOR_VERSION=$(echo "$INSTALLED_VERSION" | cut -d. -f1,2)
-                  VERSIONS=$(curl -s https://www.python.org/ftp/python/ | grep -Eo 'href="([0-9]+\.[0-9]+\.[0-9]+)/"' | cut -d'"' -f2 | tr -d '/')
-                  LATEST_VERSION=$(echo "$VERSIONS" | grep "^$MINOR_VERSION\." | sort -V | tail -n1)
-                  echo "INSTALLED_VERSION=$INSTALLED_VERSION"
-                  echo "LATEST_VERSION=$LATEST_VERSION"
-                  if [ "$INSTALLED_VERSION" != "$LATEST_VERSION" ]; then
+
+                  # Run uv python list in the Docker container
+                  UV_OUTPUT=$(docker run --rm modelw/base:${{ env.DOCKER_TAG }} sh -c "uv python list 'cpython@$MINOR_VERSION' 2>/dev/null || true")
+
+                  # Check if the first line contains "download available"
+                  FIRST_LINE=$(echo "$UV_OUTPUT" | head -n1)
+                  echo "First line of uv output: $FIRST_LINE"
+
+                  if echo "$FIRST_LINE" | grep -q "<download available>"; then
                     echo "PYTHON_UPDATE_AVAILABLE=true" >> $GITHUB_ENV
                     echo "Python update available"
                   else
@@ -95,7 +99,7 @@ jobs:
             # Decide whether to proceed with the build
             - name: Decide whether to build
               run: |
-                  if [ "${{ inputs.skip_check }}" == "true" ] || "${{ env.IMAGE_EXISTS }}" == "false" ] || [ "${{ env.APT_UPDATES_AVAILABLE }}" == "true" ] || [ "${{ env.PYTHON_UPDATE_AVAILABLE }}" == "true" ]; then
+                  if [ "${{ inputs.skip_check }}" == "true" ] || [ "${{ env.IMAGE_EXISTS }}" == "false" ] || [ "${{ env.APT_UPDATES_AVAILABLE }}" == "true" ] || [ "${{ env.PYTHON_UPDATE_AVAILABLE }}" == "true" ]; then
                     echo "SHOULD_BUILD=true" >> $GITHUB_ENV
                     echo "Will proceed to build"
                   else
