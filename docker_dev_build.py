@@ -92,6 +92,7 @@ def main():
     args = [
         "docker",
         "build",
+        *["--progress", f"plain"],
         *["--build-arg", f"MODEL_W_PIP_EXTRA={extra}"],
         *["-t", "modelw-base-test"],
         ".",
