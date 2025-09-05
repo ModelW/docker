@@ -136,6 +136,11 @@ RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP
     && ln -s /opt/python/global/bin/modelw-docker /usr/local/bin/modelw-docker
 
 
+# ---[ Making sure all is upgraded ]---
+
+RUN apt update && apt upgrade -y
+
+
 # ---[ Cleanup ]---
 
 RUN rm -fr \
