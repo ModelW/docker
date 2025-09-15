@@ -147,8 +147,6 @@ jobs:
                   context: ./image
                   push: true
                   tags: "modelw/base:${{ env.DOCKER_TAG }}"
-                  cache-from: type=gha
-                  cache-to: type=gha,mode=max
                   provenance: true
                   sbom: true
 
