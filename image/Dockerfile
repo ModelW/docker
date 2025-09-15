@@ -62,6 +62,29 @@ RUN apt-get update  \
     && apt-get install -y sudo
 
 
+# ---[ Update apt sources to new format ]---
+
+RUN rm -f /etc/apt/sources.list && \
+    mkdir -p /etc/apt/sources.list.d && \
+    cat > /etc/apt/sources.list.d/debian.sources <<EOF
+Types: deb
+URIs: https://deb.debian.org/debian
+Suites: trixie trixie-updates
+Components: main non-free-firmware
+Enabled: yes
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+Types: deb
+URIs: https://security.debian.org/debian-security
+Suites: trixie-security
+Components: main non-free-firmware
+Enabled: yes
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+EOF
+
+RUN apt-get update
+
+
 # ---[ Code user/folder ]---
 
 RUN mkdir /code \
