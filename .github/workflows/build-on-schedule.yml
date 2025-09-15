@@ -4,6 +4,12 @@ on:
     schedule:
         - cron: "42 */3 * * *"
     workflow_dispatch:
+        inputs:
+            skip_check:
+                description: 'Skip checks during build'
+                required: false
+                default: true
+                type: boolean
 
 jobs:
     call-build-image:
@@ -20,4 +26,5 @@ jobs:
                     ]
         with:
             ref: ${{ matrix.ref }}
+            skip_check: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.skip_check == 'true' || github.event.inputs.skip_check == true) }}
         secrets: inherit
