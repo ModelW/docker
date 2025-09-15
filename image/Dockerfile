@@ -161,7 +161,7 @@ RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP
 
 # ---[ Making sure all is upgraded ]---
 
-RUN apt update && apt upgrade -y
+RUN apt-get update && apt-get upgrade -y
 
 
 # ---[ Cleanup ]---
