@@ -155,7 +155,7 @@ RUN uv pip install -p /opt/python/global/bin/python3 poetry \
 
 ARG MODEL_W_PIP_EXTRA=""
 
-RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2025.7.0' \
+RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2025.10.0' \
     && ln -s /opt/python/global/bin/modelw-docker /usr/local/bin/modelw-docker
 
 
