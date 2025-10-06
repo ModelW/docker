@@ -2,7 +2,7 @@
 name = "docker_demo"
 version = "0.1.0"
 description = ""
-authors = ["Dave O'Neill <david.oneill@with-madrid.com>"]
+authors = ["Dave <david.oneill@with-madrid.com>"]
 license = "Proprietary"
 
 packages = [
@@ -11,7 +11,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "~3.13"
-modelw-preset-django = {extras = ["psycopg", "health", "procrastinate", "channels"], version = ">=2025.7.0,<2025.8.0"}
+modelw-preset-django = {extras = ["psycopg", "health", "procrastinate", "channels"], version = ">=2025.10.0,<2025.11.0"}
 drf-spectacular = {extras = ["sidecar"], version = "*"}
 # Health check modules
 markdown = "*"
@@ -34,6 +34,8 @@ pytest-django = "*"
 pytest-html = "*"
 pytest-playwright = "*"
 pyyaml = "*"
+pixelmatch = "*"
+pillow = "*"
 
 [tool.isort]
 profile = "black"
