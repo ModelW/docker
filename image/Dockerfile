@@ -109,8 +109,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_VERSION | sh \
     && apt-get install -y nodejs
 
 RUN curl -fsSL https://get.pnpm.io/install.sh | env SHELL=bash PNPM_HOME=/opt/pnpm bash - \
-    && ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm \
-    && ln -s /opt/pnpm/pnpx /usr/local/bin/pnpx
+    && ln -s /opt/pnpm/.tools/pnpm-exe/*/pnpm /usr/local/bin/pnpm \
+    && ln -s /opt/pnpm/.tools/pnpm-exe/*/pnpx /usr/local/bin/pnpx
 
 
 # ---[ Python ]---
