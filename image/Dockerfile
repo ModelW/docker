@@ -46,6 +46,7 @@ FROM scratch AS debian-model-w
 ARG PYTHON_VERSION
 ARG NODE_VERSION
 ARG POSTGRESQL_VERSION
+ARG DEBIAN_VERSION
 
 
 # ---[ Getting base OS ]---
@@ -69,14 +70,14 @@ RUN rm -f /etc/apt/sources.list && \
     cat > /etc/apt/sources.list.d/debian.sources <<EOF
 Types: deb
 URIs: https://deb.debian.org/debian
-Suites: trixie trixie-updates
+Suites: ${DEBIAN_VERSION} ${DEBIAN_VERSION}-updates
 Components: main non-free-firmware
 Enabled: yes
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
 URIs: https://security.debian.org/debian-security
-Suites: trixie-security
+Suites: ${DEBIAN_VERSION}-security
 Components: main non-free-firmware
 Enabled: yes
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
