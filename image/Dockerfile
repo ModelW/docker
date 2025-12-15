@@ -164,6 +164,10 @@ RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP
 
 RUN apt-get update && apt-get upgrade -y
 
+# ---[ Updating npm ]---
+
+RUN npm install -g npm@latest
+
 
 # ---[ Cleanup ]---
 
