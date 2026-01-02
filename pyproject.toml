@@ -15,7 +15,7 @@ classifiers = [
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Build Tools",
     "Topic :: Utilities",
     "Framework :: Django",
@@ -26,15 +26,15 @@ classifiers = [
 modelw-docker = "model_w.docker.__main__:__main__"
 
 [tool.poetry.dependencies]
-python = "^3.13"
+python = "^3.14"
 setuptools = "*"
-psutil = "^5.9.5"
+psutil = "^7.2.1"
 colorama = "^0.4.6"
 typefit = "^1.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
-monoformat = "^0.1.0b3"
+monoformat = "^0.2.0"
 
 [build-system]
 requires = ["poetry-core"]
