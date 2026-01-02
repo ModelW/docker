@@ -8,8 +8,8 @@
 #.JML. `'  .JMML.`Ybmd9'   `Wbmd"MML.`Mbmmd'.JMML.          VF      VF
 
 ARG DEBIAN_VERSION=trixie
-ARG NODE_VERSION=22.x
-ARG PYTHON_VERSION=3.13
+ARG NODE_VERSION=24.x
+ARG PYTHON_VERSION=3.14
 ARG POSTGRESQL_VERSION=15
 
 #   ____       _     _
@@ -46,6 +46,7 @@ FROM scratch AS debian-model-w
 ARG PYTHON_VERSION
 ARG NODE_VERSION
 ARG POSTGRESQL_VERSION
+ARG DEBIAN_VERSION
 
 
 # ---[ Getting base OS ]---
@@ -69,14 +70,14 @@ RUN rm -f /etc/apt/sources.list && \
     cat > /etc/apt/sources.list.d/debian.sources <<EOF
 Types: deb
 URIs: https://deb.debian.org/debian
-Suites: trixie trixie-updates
+Suites: ${DEBIAN_VERSION} ${DEBIAN_VERSION}-updates
 Components: main non-free-firmware
 Enabled: yes
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
 URIs: https://security.debian.org/debian-security
-Suites: trixie-security
+Suites: ${DEBIAN_VERSION}-security
 Components: main non-free-firmware
 Enabled: yes
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
@@ -109,8 +110,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_VERSION | sh \
     && apt-get install -y nodejs
 
 RUN curl -fsSL https://get.pnpm.io/install.sh | env SHELL=bash PNPM_HOME=/opt/pnpm bash - \
-    && ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm \
-    && ln -s /opt/pnpm/pnpx /usr/local/bin/pnpx
+    && ln -s /opt/pnpm/.tools/pnpm-exe/*/pnpm /usr/local/bin/pnpm \
+    && ln -s /opt/pnpm/.tools/pnpm-exe/*/pnpx /usr/local/bin/pnpx
 
 
 # ---[ Python ]---
@@ -155,7 +156,7 @@ RUN uv pip install -p /opt/python/global/bin/python3 poetry \
 
 ARG MODEL_W_PIP_EXTRA=""
 
-RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2025.10.0' \
+RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2026.1.0' \
     && ln -s /opt/python/global/bin/modelw-docker /usr/local/bin/modelw-docker
 
 
