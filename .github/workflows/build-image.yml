@@ -142,13 +142,14 @@ jobs:
             # Build and push the image if we should build
             - name: Build and push
               if: env.SHOULD_BUILD == 'true'
-              uses: docker/build-push-action@v5
+              uses: docker/build-push-action@v6
               with:
                   context: ./image
                   push: true
                   tags: "modelw/base:${{ env.DOCKER_TAG }}"
                   provenance: true
                   sbom: true
+                  no-cache: true
 
             # Indicate if the build was skipped
             - name: Build skipped
