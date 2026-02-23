@@ -143,7 +143,7 @@ RUN apt-get install -y \
     libpangoft2-1.0-0
 
 RUN uv python install -i /opt/python -r ${PYTHON_VERSION} \
-    && uv venv -p /opt/python/cpython-*/bin/python /opt/python/global \
+    && UV_PYTHON_INSTALL_DIR=/opt/python uv venv -p ${PYTHON_VERSION} /opt/python/global \
     && ln -s /opt/python/global/bin/python3 /usr/local/bin/python${PYTHON_VERSION} \
     && ln -s /opt/python/global/bin/python3 /usr/local/bin/python3 \
     && ln -s /opt/python/global/bin/python3 /usr/local/bin/python
