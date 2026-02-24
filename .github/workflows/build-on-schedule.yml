@@ -38,7 +38,7 @@ jobs:
                           --data-raw '{
                             "monitor_config": {
                               "schedule": {"type": "crontab", "value": "42 */3 * * *"},
-                              "checkin_margin": 10,
+                              "checkin_margin": 180,
                               "max_runtime": 60,
                               "timezone": "UTC",
                               "failure_issue_threshold": 1,
