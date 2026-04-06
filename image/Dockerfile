@@ -166,7 +166,7 @@ RUN apt-get update && apt-get upgrade -y
 
 # ---[ Updating npm ]---
 
-RUN npm install -g npm@latest
+RUN corepack enable && corepack prepare npm@latest --activate
 
 
 # ---[ Cleanup ]---
