@@ -4,11 +4,9 @@ from asgiref.sync import async_to_sync
 from django.conf import settings
 from health_check.cache.backends import CacheBackend
 from health_check.contrib.psutil.backends import MemoryUsage
-from health_check.db.backends import (
-    BaseHealthCheckBackend,
-    DatabaseBackend,
-    ServiceUnavailable,
-)
+from health_check.db.backends import DatabaseBackend
+from health_check.db.backends import HealthCheck as BaseHealthCheckBackend
+from health_check.db.backends import ServiceUnavailable
 
 from .base import DjangoHealthCheckWrapper, HealthCheck, Outcome, Status
 from .models import Event
