@@ -143,7 +143,7 @@ RUN apt-get install -y \
     libpangoft2-1.0-0
 
 RUN uv python install -i /opt/python -r ${PYTHON_VERSION} \
-    && uv venv -p /opt/python/cpython-*/bin/python /opt/python/global \
+    && UV_PYTHON_INSTALL_DIR=/opt/python uv venv -p ${PYTHON_VERSION} /opt/python/global \
     && ln -s /opt/python/global/bin/python3 /usr/local/bin/python${PYTHON_VERSION} \
     && ln -s /opt/python/global/bin/python3 /usr/local/bin/python3 \
     && ln -s /opt/python/global/bin/python3 /usr/local/bin/python
@@ -156,13 +156,17 @@ RUN uv pip install -p /opt/python/global/bin/python3 poetry \
 
 ARG MODEL_W_PIP_EXTRA=""
 
-RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2026.1.0' \
+RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2026.4.0' \
     && ln -s /opt/python/global/bin/modelw-docker /usr/local/bin/modelw-docker
 
 
 # ---[ Making sure all is upgraded ]---
 
 RUN apt-get update && apt-get upgrade -y
+
+# ---[ Updating npm ]---
+
+RUN corepack enable && corepack prepare npm@latest --activate
 
 
 # ---[ Cleanup ]---

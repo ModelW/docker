@@ -24,7 +24,6 @@ from WITH.
 ### Components
 
 This project is composed of the following components:
-
 -   [API](./api) &mdash; The back-end of the project, mostly serving as API and
     back-office admin. Most of the time, URLs targeting the API are prefixed by
     `/back`.
