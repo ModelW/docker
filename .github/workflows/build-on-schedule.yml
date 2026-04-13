@@ -59,10 +59,10 @@ jobs:
             matrix:
                 ref:
                     [
-                        "support/2025.04",
                         "support/2025.07",
                         "support/2025.10",
                         "support/2026.01",
+                        "support/2026.04",
                     ]
         with:
             ref: ${{ matrix.ref }}
