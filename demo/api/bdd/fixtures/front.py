@@ -81,6 +81,10 @@ def overwrite_settings(
     """
     base_url = front_server.strip("/")
     settings.BASE_URL = base_url
+    base_origin = base_url.replace(":80", "").split("://", 1)[-1]
+    settings.CSRF_TRUSTED_ORIGINS = [
+        f"{scheme}://{base_origin}" for scheme in ["http", "https"]
+    ]
     return settings
 
 

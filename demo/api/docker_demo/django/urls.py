@@ -1,50 +1,32 @@
+from importlib import metadata
+
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
-from rest_framework.routers import DefaultRouter, SimpleRouter
+from ninja import NinjaAPI
 
-from docker_demo.apps.people.views import MeViewSet
+from docker_demo.apps.people.api import router as people_router
 
 admin.site.site_title = _("Docker Demo")
 admin.site.site_header = _("Docker Demo")
 
+api = NinjaAPI(
+    title="Docker Demo API",
+    version=metadata.version("docker_demo"),
+    docs_url=(settings.DEBUG and "/docs") or "",
+    openapi_url=(settings.DEBUG and "/openapi.json") or "",
+)
 
-if settings.DEBUG:
-    router = DefaultRouter()
-else:
-    router = SimpleRouter()
-
-router.register("me", MeViewSet, basename="me")
+api.add_router("/me", people_router)
 
 urlpatterns = [
     path("back/_/ht/", include("docker_demo.apps.health.urls")),
     path("back/admin/", admin.site.urls),
-    path("back/api/", include(router.urls)),
+    path("back/api/", api.urls),
 ]
 
 if settings.DEBUG:
-    from drf_spectacular.views import (
-        SpectacularAPIView,
-        SpectacularRedocView,
-        SpectacularSwaggerView,
-    )
-
-    urlpatterns = [
-        path(
-            "back/api/schema/",
-            SpectacularAPIView.as_view(),
-            name="schema",
-        ),
-        path(
-            "back/api/schema/swagger-ui/",
-            SpectacularSwaggerView.as_view(url_name="schema"),
-            name="swagger-ui",
-        ),
-        path(
-            "back/api/schema/redoc/",
-            SpectacularRedocView.as_view(url_name="schema"),
-            name="redoc",
-        ),
+    urlpatterns += [
         path("back/__debug__/", include("debug_toolbar.urls")),
-    ] + urlpatterns
+    ]
