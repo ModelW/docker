@@ -41,7 +41,7 @@ jobs:
                               "checkin_margin": 180,
                               "max_runtime": 60,
                               "timezone": "UTC",
-                              "failure_issue_threshold": 1,
+                              "failure_issue_threshold": 3,
                               "recovery_threshold": 1
                             },
                             "status": "in_progress"
