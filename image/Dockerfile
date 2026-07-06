@@ -109,10 +109,6 @@ RUN apt-get install -y postgresql-common \
 RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_VERSION | sh \
     && apt-get install -y nodejs
 
-RUN curl -fsSL https://get.pnpm.io/install.sh | env SHELL=bash PNPM_HOME=/opt/pnpm bash - \
-    && ln -s /opt/pnpm/.tools/pnpm-exe/*/pnpm /usr/local/bin/pnpm \
-    && ln -s /opt/pnpm/.tools/pnpm-exe/*/pnpx /usr/local/bin/pnpx
-
 
 # ---[ Python ]---
 
@@ -156,7 +152,7 @@ RUN uv pip install -p /opt/python/global/bin/python3 poetry \
 
 ARG MODEL_W_PIP_EXTRA=""
 
-RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2026.4.0' \
+RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2026.7.0' \
     && ln -s /opt/python/global/bin/modelw-docker /usr/local/bin/modelw-docker
 
 
@@ -166,12 +162,22 @@ RUN apt-get update && apt-get upgrade -y
 
 # ---[ Updating npm ]---
 
-RUN corepack enable && corepack prepare npm@latest --activate
+RUN --mount=type=cache,target=/root/.npm \
+    --mount=type=cache,target=/root/.cache \
+    npm install -g pnpm@latest \
+    && rm -rf /usr/lib/node_modules/npm \
+    && pnpm config set global-bin-dir /usr/bin \
+    && pnpm config set global-dir /usr/local/share/pnpm-global \
+    && pnpm config set store-dir /usr/local/share/pnpm-store \
+    && pnpm add -g npm@latest pnpm@latest \
+    && chmod -R 755 /usr/local/share/pnpm-global /usr/local/share/pnpm-store
 
 
 # ---[ Cleanup ]---
 
 RUN rm -fr \
+    /root/.cache \
+    /root/.npm \
     /var/log/alternatives.log \
     /var/log/apt/history.log \
     /var/log/apt/term.log \

@@ -41,7 +41,7 @@ jobs:
                               "checkin_margin": 180,
                               "max_runtime": 60,
                               "timezone": "UTC",
-                              "failure_issue_threshold": 1,
+                              "failure_issue_threshold": 3,
                               "recovery_threshold": 1
                             },
                             "status": "in_progress"
@@ -59,10 +59,10 @@ jobs:
             matrix:
                 ref:
                     [
-                        "support/2025.04",
-                        "support/2025.07",
                         "support/2025.10",
                         "support/2026.01",
+                        "support/2026.04",
+                        "support/2026.07",
                     ]
         with:
             ref: ${{ matrix.ref }}

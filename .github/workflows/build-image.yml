@@ -97,6 +97,43 @@ jobs:
                     echo "Python is up to date"
                   fi
 
+            # Check for available pnpm updates if the image exists
+            - name: Check for pnpm updates in image
+              if: inputs.skip_check == false && env.IMAGE_EXISTS == 'true'
+              run: |
+                  # We check for global packages updates
+                  # We use || true because pnpm outdated returns exit code 1 if there are outdated packages
+                  # We run as root to use the global configuration set during build
+                  UPDATES=$(docker run --rm --user root modelw/base:${{ env.DOCKER_TAG }} pnpm outdated -g --format json 2>/dev/null || true)
+                  if [[ -n "$UPDATES" ]] && echo "$UPDATES" | jq -e 'length > 0' >/dev/null 2>&1; then
+                    echo "PNPM_UPDATES_AVAILABLE=true" >> $GITHUB_ENV
+                    echo "pnpm updates are available:"
+                    echo "$UPDATES" | jq .
+                  else
+                    echo "PNPM_UPDATES_AVAILABLE=false" >> $GITHUB_ENV
+                    echo "No pnpm updates available"
+                  fi
+
+            # Check for a newer uv release if the image exists.
+            # uv is copied from ghcr.io/astral-sh/uv:latest at build time and
+            # bundles Rust crates (e.g. quinn-proto). Security fixes in those
+            # crates only reach us through a new uv release, so we compare the
+            # uv version baked into the current image against the latest one.
+            - name: Check for uv updates in image
+              if: inputs.skip_check == false && env.IMAGE_EXISTS == 'true'
+              run: |
+                  INSTALLED_UV=$(docker run --rm modelw/base:${{ env.DOCKER_TAG }} uv --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1)
+                  LATEST_UV=$(docker run --rm ghcr.io/astral-sh/uv:latest --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1)
+                  echo "Installed uv: ${INSTALLED_UV:-unknown}"
+                  echo "Latest uv:    ${LATEST_UV:-unknown}"
+                  if [[ -n "$INSTALLED_UV" && -n "$LATEST_UV" && "$INSTALLED_UV" != "$LATEST_UV" ]]; then
+                    echo "UV_UPDATE_AVAILABLE=true" >> $GITHUB_ENV
+                    echo "uv update available ($INSTALLED_UV -> $LATEST_UV)"
+                  else
+                    echo "UV_UPDATE_AVAILABLE=false" >> $GITHUB_ENV
+                    echo "uv is up to date"
+                  fi
+
             # Decide whether to proceed with the build
             - name: Decide whether to build
               run: |
@@ -112,6 +149,12 @@ jobs:
                   elif [ "${{ env.PYTHON_UPDATE_AVAILABLE }}" == "true" ]; then
                     echo "SHOULD_BUILD=true" >> $GITHUB_ENV
                     echo "Will proceed to build (Python update available)"
+                  elif [ "${{ env.PNPM_UPDATES_AVAILABLE }}" == "true" ]; then
+                    echo "SHOULD_BUILD=true" >> $GITHUB_ENV
+                    echo "Will proceed to build (pnpm updates available)"
+                  elif [ "${{ env.UV_UPDATE_AVAILABLE }}" == "true" ]; then
+                    echo "SHOULD_BUILD=true" >> $GITHUB_ENV
+                    echo "Will proceed to build (uv update available)"
                   else
                     echo "SHOULD_BUILD=false" >> $GITHUB_ENV
                     echo "No need to build (image is up to date)"
