@@ -55,7 +55,6 @@ jobs:
         needs: sentry-start
         uses: ./.github/workflows/build-image.yml
         strategy:
-            max-parallel: 1
             matrix:
                 ref:
                     [
