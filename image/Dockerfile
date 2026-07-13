@@ -170,7 +170,6 @@ RUN --mount=type=cache,target=/root/.npm \
     && pnpm config set global-dir /usr/local/share/pnpm-global \
     && pnpm config set store-dir /usr/local/share/pnpm-store \
     && pnpm add -g npm@latest \
-    && pnpm self-update \
     && chmod -R 755 /usr/local/share/pnpm-global /usr/local/share/pnpm-store
 
 
