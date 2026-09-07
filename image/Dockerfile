@@ -170,7 +170,10 @@ RUN --mount=type=cache,target=/root/.npm \
     && pnpm config set global-dir /usr/local/share/pnpm-global \
     && pnpm config set store-dir /usr/local/share/pnpm-store \
     && pnpm add -g npm@latest \
-    && chmod -R 755 /usr/local/share/pnpm-global /usr/local/share/pnpm-store
+    && chmod -R 755 /usr/local/share/pnpm-global /usr/local/share/pnpm-store \
+    # pnpm >= 12 installs global bins as hard links to itself and stores the \
+    # real target in 0600 sidecar files, unreadable by the non-root `user` \
+    && find /usr/bin -maxdepth 1 -name '.pnpm-shim-*' -exec chmod a+r {} +
 
 
 # ---[ Cleanup ]---
