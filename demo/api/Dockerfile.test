@@ -20,4 +20,4 @@ COPY . .
 
 RUN modelw-docker build
 
-CMD ["modelw-docker", "run", "pytest"]
+CMD ["modelw-docker", "run", "pytest", "-m", "not skipCI"]
