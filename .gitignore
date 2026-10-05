@@ -240,5 +240,5 @@ sw.*
 
 /repo
 /demo/api/poetry.lock
-/demo/front/package-lock.json
+/demo/front/pnpm-lock.yaml
 .secrets
