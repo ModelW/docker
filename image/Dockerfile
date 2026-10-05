@@ -152,7 +152,7 @@ RUN uv pip install -p /opt/python/global/bin/python3 poetry \
 
 ARG MODEL_W_PIP_EXTRA=""
 
-RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2026.7.0' \
+RUN uv pip install -p /opt/python/global/bin/python3 --no-cache-dir $MODEL_W_PIP_EXTRA 'modelw-docker==2026.10.0' \
     && ln -s /opt/python/global/bin/modelw-docker /usr/local/bin/modelw-docker
 
 
@@ -169,8 +169,11 @@ RUN --mount=type=cache,target=/root/.npm \
     && pnpm config set global-bin-dir /usr/bin \
     && pnpm config set global-dir /usr/local/share/pnpm-global \
     && pnpm config set store-dir /usr/local/share/pnpm-store \
-    && pnpm add -g npm@latest pnpm@latest \
-    && chmod -R 755 /usr/local/share/pnpm-global /usr/local/share/pnpm-store
+    && pnpm add -g npm@latest \
+    && chmod -R 755 /usr/local/share/pnpm-global /usr/local/share/pnpm-store \
+    # pnpm >= 12 installs global bins as hard links to itself and stores the \
+    # real target in 0600 sidecar files, unreadable by the non-root `user` \
+    && find /usr/bin -maxdepth 1 -name '.pnpm-shim-*' -exec chmod a+r {} +
 
 
 # ---[ Cleanup ]---

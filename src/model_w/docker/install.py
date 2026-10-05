@@ -162,9 +162,17 @@ def install_api(config: Config, path: Path, dry_run: bool = True) -> None:
     )
 
 
-def install_front(config: Config, path: Path) -> None:
+def install_front(config: Config, path: Path, dry_run: bool = True) -> None:
     """
-    Basically just npm install and then clean the cache
+    Install front dependencies with pnpm.
+
+    We force "verify-deps-before-run" to false because pnpm defaults it to
+    "install": before running a script (e.g. "pnpm run build" during the image
+    build) pnpm checks whether node_modules is up to date and, if not, runs an
+    install. We've just installed from the lockfile and we want the build to
+    use exactly those locked dependencies; letting pnpm reinstall implicitly
+    could resolve something different from what the lockfile guarantees, which
+    is precisely what CI/CD must avoid.
     """
 
     printer = Printer.instance()
@@ -175,15 +183,30 @@ def install_front(config: Config, path: Path) -> None:
 
     printer.env_patch["BUILD_MODE"] = "true"
 
+    npmrc = path / ".npmrc"
+    key = "verify-deps-before-run"
+    line = f"{key}=false"
+
+    original = npmrc.read_text() if npmrc.exists() else ""
+    kept = [
+        raw
+        for raw in original.splitlines()
+        if raw.lstrip().startswith(("#", ";")) or raw.split("=", 1)[0].strip() != key
+    ]
+    content = "\n".join([*kept, line]) + "\n"
+
+    if content == original:
+        printer.doing(f"{key} already set to false in .npmrc")
+    else:
+        printer.doing(f"Setting {key}=false in .npmrc")
+
+        if not dry_run:
+            npmrc.write_text(content)
+
     printer.exec(
         "Installing dependencies",
         path,
-        ["npm", "install"],
-    )
-    printer.exec(
-        "Clean NPM cache",
-        path,
-        ["npm", "cache", "clean", "--force"],
+        ["pnpm", "install", "--frozen-lockfile", "--ignore-scripts"],
     )
 
 
@@ -201,6 +224,6 @@ def install(config: Config, path: Path, dry_run: bool = True) -> None:
     if config.project.component == "api":
         return install_api(config, path, dry_run)
     elif config.project.component == "front":
-        return install_front(config, path)
+        return install_front(config, path, dry_run)
     else:
         raise UserException(f"Unknown component: {config.project.component}")

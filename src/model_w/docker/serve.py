@@ -109,7 +109,7 @@ def serve_api_default(config: Config, path: Path) -> None:
                 path,
                 [
                     *run_command,
-                    *["--interface", "asgi"],
+                    *["--interface", "asginl"],
                     config.project.asgi,
                 ],
             )

@@ -31,10 +31,8 @@ update-snapshots:
 tm_dfd:
 	cd security && $(PYTHON_BIN) threat_model.py --dfd | dot -Tpng -o dfd.png
 
-
 tm_seq:
 	cd security && $(PYTHON_BIN) threat_model.py --seq | plantuml -tpng -pipe > seq.png
-
 
 tm_report: tm_dfd tm_seq
 	cd security && $(PYTHON_BIN) threat_model.py --report report_template.md > report.md

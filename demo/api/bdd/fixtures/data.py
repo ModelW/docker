@@ -6,7 +6,7 @@ For example, users, pages, models, etc.
 
 import pytest
 from bdd.utils import data_utils
-from pytest_django.fixtures import SettingsWrapper
+from pytest_django.fixtures import Settings
 
 
 @pytest.fixture(autouse=True)
