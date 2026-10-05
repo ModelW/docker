@@ -27,7 +27,7 @@ def build_api(path: Path) -> None:
 
 def build_front(path: Path) -> None:
     """
-    Compile the front with npm run build
+    Compile the front with pnpm run build
     """
 
     printer = Printer.instance()
@@ -39,7 +39,7 @@ def build_front(path: Path) -> None:
     printer.exec(
         "Running front build script",
         path,
-        ["npm", "run", "build"],
+        ["pnpm", "run", "build"],
     )
 
 
