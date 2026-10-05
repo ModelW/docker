@@ -15,7 +15,7 @@ build_test_front: build_test_base
 	cd demo/front && docker build -t modelw-base-test-front .
 
 demo_run: build_test_base
-	docker compose -p modelw_demo_project -f docker-compose.yaml up --build --force-recreate --abort-on-container-exit --remove-orphans | tee demo.log
+	docker compose -p modelw_demo_project -f docker-compose.yaml up --build --force-recreate --abort-on-container-exit --remove-orphans < /dev/null 2>&1 | tee demo.log
 
 demo_stop:
 	docker compose -p modelw_demo_project -f docker-compose.yaml down --remove-orphans
